@@ -78,7 +78,7 @@ if selected_movie:
     st.plotly_chart(fig1, use_container_width=True)
     
     # 그래프 해설/문구 자리
-    st.info(f"💡 **이 그래프로 알 수 있는 것:** {selected_movie}의 개봉 초기 관객 집중도와 주말/평일 관객수 변동 패턴을 한눈에 파악할 수 있습니다.")
+    st.info(f"💡 **이 그래프로 알 수 있는 것:** 원하는 영화에 시작과 끝에 흥행도를 볼수 있습니다.")
 
 st.divider()
 
@@ -125,7 +125,7 @@ fig2.update_layout(
 st.plotly_chart(fig2, use_container_width=True)
 
 # 그래프 해설/문구 자리
-st.info("💡 **이 그래프로 알 수 있는 것:** 기간 내 가장 흥행한 상위 5개 영화의 개봉 시기별 최고 관객수 전개 양상과 경쟁 구도를 한눈에 비교할 수 있습니다.")
+st.info("💡 **이 그래프로 알 수 있는 것:** 기간 내 흥행한 영화에 기록을 볼수 있습니다 상위 5위.")
 
 st.divider()
 
@@ -182,7 +182,7 @@ fig3.update_layout(
 st.plotly_chart(fig3, use_container_width=True)
 
 # 그래프 해설/문구 자리
-st.info("💡 **이 그래프로 알 수 있는 것:** 전체 영화 시장의 성수기/비수기 흐름과 특정 명절·연휴 등 극장가 관객 동원력이 가장 높았던 상위 3일을 직관적으로 확인할 수 있습니다.")
+st.info("💡 **이 그래프로 알 수 있는 것:** 언제 사람이 가장 많이 영화관에 방문했는지 순위 3위를 볼수 있습니다.")
 
 st.divider()
 
@@ -230,7 +230,7 @@ fig4.update_layout(
 st.plotly_chart(fig4, use_container_width=True)
 
 # 그래프 해설/문구 자리
-st.info("💡 **이 그래프로 알 수 있는 것:** 해당 기간 동안 가장 많은 관객을 끌어모은 최고 흥행작 TOP 10 순위와 각 영화가 Box Office 10위권 내에 방영·유지되었던 일수를 비교 분석할 수 있습니다.")
+st.info("💡 **이 그래프로 알 수 있는 것:** .")
 
 st.divider()
 
@@ -295,7 +295,7 @@ fig5.update_layout(
 st.plotly_chart(fig5, use_container_width=True)
 
 # 그래프 해설/문구 자리
-st.info("💡 **이 그래프로 알 수 있는 것:** 연중 어떤 월(Month)과 무슨 요일(Day)의 조합에 극장 관객이 가장 집중되었는지(예: 주말/연휴/특수 시즌) 한눈에 분석할 수 있습니다.")
+st.info("💡 **이 그래프로 알 수 있는 것:** 어떤 달에 어떤 요일에 사람이 얼마나 몰렸는지 집중도를 볼수있습니다.")
 
 st.divider()
 
