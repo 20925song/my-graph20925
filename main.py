@@ -199,8 +199,6 @@ top10_summary = df.groupby('영화명').agg(
 
 # 총 관객수 기준 TOP 10 추출
 top10_summary = top10_summary.nlargest(10, '총관객수')
-
-# 가로 막대그래프 생성을 위해 내림차순 정렬 (Plotly 가로막대는 아래에서부터 쌓이므로 내림차순 정렬 후 Y축 오더 설정)
 top10_summary = top10_summary.sort_values('총관객수', ascending=True)
 
 fig4 = px.bar(
@@ -215,7 +213,6 @@ fig4 = px.bar(
     color_continuous_scale='Blues'
 )
 
-# 마우스 오버 툴팁 및 가로 막대 텍스트 설정
 fig4.update_traces(
     hovertemplate="<b>영화명:</b> %{y}<br><b>총 관객수:</b> %{x:,}명<br><b>10위권 차트인 일수:</b> %{customdata[0]}일<extra></extra>",
     texttemplate="%{x:,}명",
@@ -225,7 +222,7 @@ fig4.update_traces(
 fig4.update_layout(
     xaxis_title="기간 내 총 관객수",
     yaxis_title="영화 제목",
-    yaxis=dict(categoryorder="total ascending"), # 관객이 많은 영화가 위에 오도록 정렬
+    yaxis=dict(categoryorder="total ascending"),
     coloraxis_showscale=False,
     template="plotly_white"
 )
@@ -238,7 +235,72 @@ st.info("💡 **이 그래프로 알 수 있는 것:** 해당 기간 동안 가�
 st.divider()
 
 # ==========================================
-# 구역 5: 추후 그래프 추가용 영역
+# 구역 5: 월×요일별 일관객 합계 히트맵
 # ==========================================
-st.header("📌 5. 요일별/월별 누적 패턴 (추가 예정)")
-st.caption("※ 요일별 관객 유입 및 장기 상영 영화의 누적 관객 증가 곡선 그래프가 들어갈 자리입니다.")
+st.header("📌 5. 월×요일별 관객수 집계 히트맵")
+
+# 날짜 데이터에서 월과 요일 추출
+heatmap_df = df.copy()
+heatmap_df['월'] = heatmap_df['날짜'].dt.month.astype(str) + "월"
+heatmap_df['요일'] = heatmap_df['날짜'].dt.day_name()
+
+# 요일 한글 변환 및 월요일~일요일 순서 정렬 지정
+day_map = {
+    'Monday': '월요일',
+    'Tuesday': '화요일',
+    'Wednesday': '수요일',
+    'Thursday': '목요일',
+    'Friday': '금요일',
+    'Saturday': '토요일',
+    'Sunday': '일요일'
+}
+day_order = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일']
+heatmap_df['요일'] = heatmap_df['요일'].map(day_map)
+
+# 월(1월~12월) 정렬 순서 준비
+month_order = [f"{i}월" for i in range(1, 13)]
+
+# 월 x 요일 피벗 테이블 생성 (일관객 합계)
+pivot_df = heatmap_df.pivot_table(
+    index='월',
+    columns='요일',
+    values='일관객',
+    aggfunc='sum',
+    fill_value=0
+)
+
+# 지정한 월/요일 순서대로 재정렬
+pivot_df = pivot_df.reindex(index=month_order, columns=day_order).fillna(0)
+
+# Plotly imshow 히트맵 생성 (진한 색상이 높은 관객수를 의미)
+fig5 = px.imshow(
+    pivot_df,
+    labels=dict(x="요일", y="월", color="총 관객수"),
+    x=day_order,
+    y=month_order,
+    color_continuous_scale="YlOrRd", # 관객수가 많을수록 붉고 진한 색상
+    title="월×요일별 관객수 합계 히트맵"
+)
+
+fig5.update_traces(
+    hovertemplate="<b>%{y} %{x}</b><br>총 관객수: %{z:,}명<extra></extra>"
+)
+
+fig5.update_layout(
+    xaxis_title="요일",
+    yaxis_title="월",
+    template="plotly_white"
+)
+
+st.plotly_chart(fig5, use_container_width=True)
+
+# 그래프 해설/문구 자리
+st.info("💡 **이 그래프로 알 수 있는 것:** 연중 어떤 월(Month)과 무슨 요일(Day)의 조합에 극장 관객이 가장 집중되었는지(예: 주말/연휴/특수 시즌) 한눈에 분석할 수 있습니다.")
+
+st.divider()
+
+# ==========================================
+# 구역 6: 추후 그래프 추가용 영역
+# ==========================================
+st.header("📌 6. 신규 그래프 (추가 예정)")
+st.caption("※ 향후 스크린수 대비 관객수 효율성 등 추가 시계열 분석 그래프가 들어갈 자리입니다.")
